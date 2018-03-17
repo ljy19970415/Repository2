@@ -32,7 +32,7 @@ public static void main(String[] args)
             if(line!=null)
             System.out.println(line);
         }  
-
+        
         /* 写入文件 */  
         File writename = new File("output.txt"); // 相对路径，如果没有则要建立一个新的output。txt文件  
         writename.createNewFile(); // 创建新文件  
