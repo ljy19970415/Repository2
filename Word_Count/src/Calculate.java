@@ -23,6 +23,8 @@ public class Calculate    //计算文件总字符数，总单词数
 	public int note=0;     //注释行数
 	public int code=0;       //代码行数
 	public int empty=0;      //空行行数
+	int left=0;            // "/*"的个数
+	int right=0;           // "*/"的个数
 	 //定义一个map集合保存停用单词
     public TreeMap<String,Integer> tm = new TreeMap<String,Integer>();
     
@@ -116,7 +118,6 @@ public void s_calfile(String filepath,String stoppath)
 	    }
 	    word+=temp;
 	}
-	 System.out.println("剩余单词");
 	/**统计完毕**/
 	}
     catch (Exception e) 
@@ -127,10 +128,95 @@ public void s_calfile(String filepath,String stoppath)
 }
 
 /**统计文件各类行数**/
-public void calALL()
+public void calAll(String filepath)
 {
 	note=code=empty=0;
+	int flag=0; //判断多行注释标志
+	String note1="(\\s*)(.?)(\\s*)//.*"; // "..?..//.."注释的正则表达式
+	String note2="(\\s*)(/\\*)(.*)(\\*/)(\\s*)(.?)(\\s*)"; // "../*..*/..?.."注释的正则表达式
+	String note3="(\\s*)(.?)(\\s*)(/\\*)(.*)(\\*/)(\\s*)"; // "..?../*..*/.."注释的正则表达式
+	String note4="(\\s*)(.?)(\\s*)(/\\*)(.*)"; // "..?../*.."注释的正则表达式
+	String empty1="(\\s*)(.?)(\\s*)"; 
+	try 
+    { // 防止文件建立或读取失败，用catch捕捉错误并打印，也可以throw  
+        /* 读入TXT文件 */  
+        File filename = new File(filepath); // 要读取以上路径的input.txt文件 
+        InputStreamReader reader = new InputStreamReader( new FileInputStream(filename)); // 建立一个输入流对象reader  
+        BufferedReader br = new BufferedReader(reader); // 建立一个对象，它把文件内容转成计算机能读懂的语言  
+        String line =null;  
+        while ((line=br.readLine() )!= null) 
+        {  
+          left=right=0;
+          if(flag==0) //当前非多行注释
+          {
+        	  if(line.matches(note1))  // 形如//
+        	       note++;
+        	  else if(line.matches(note2)) //  形如/*..*/
+        		   note++;
+        	  else if(line.matches(note3))  // 形如/*..*/
+        		   note++;
+        	  else if(line.matches(note4))   
+        	  {
+        		  sub(line);
+        		  flag+=left;  	  //统计"/*"个数,flag+=个数
+        		  flag-=right;    //统计"*/"个数,flag-=个数
+        		  if(flag==0)             //闭合，但不符合注释行条件
+        			 code++;
+        		  else                    //形如/*..且不闭合
+        			 note++;
+        	  }
+        	  else if(line.matches(empty1))
+        		  empty++;
+        	  else
+        		  code++;
+          }
+          else       //当前是多行注释
+          { 
+              sub(line);
+    		  flag+=left;  	  //统计"/*"个数,flag+=个数
+    		  flag-=right;    //统计"*/"个数,flag-=个数
+    		  if(flag==0)       //多行注释到此结束
+    		  {
+    			  if(line.matches("(.*)(\\*/)(\\s*)(.?)(\\s*)"))  //若*/后只有最多1个代码符号
+    			  {
+    				 note++;
+    			  }
+    			  else                  //若*/后有多于1个代码符号
+    			  {
+    				 code++;
+    			  }
+    		  }  
+    		  else              //当前仍是多行注释
+    			  note++;
+          }
+        }  
+    } 
+    catch (Exception e) 
+    {  
+        e.printStackTrace();  
+    } 
 	
+}
+
+/**统计注释符号个数函数**/
+public void sub(String string) 
+{
+	int i=0;
+	while (i <= string.length()-2 ) 
+	{
+	if (string.substring(i, i + 2).equals("/*")) 
+	{
+		left++;
+		i+=2;
+	}
+	else if(string.substring(i, i + 2).equals("*/"))
+	{
+		right++;
+		i+=2;
+	}
+	else
+		i++;
+	}
 }
 
 /**生成禁用词表函数**/
@@ -167,7 +253,6 @@ public void make_tree(String stoppath)
 	    }
 	}
 	/**制作完毕**/
-	 System.out.println("禁用单词");
 	}
 
     catch (Exception e) 

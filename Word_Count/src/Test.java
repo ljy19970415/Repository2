@@ -1,15 +1,9 @@
-/*
- * 程序：word_count
- * 当前功能：读写文件
- * 创作者：雷佳谕
- * 版本：1.0
- */
-    import java.io.File;  
-    import java.io.InputStreamReader;  
-    import java.io.BufferedReader;  
-    import java.io.BufferedWriter;  
-    import java.io.FileInputStream;  
-    import java.io.FileWriter;  
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class Test 
 {
@@ -37,6 +31,8 @@ public static void main(String[] args)
 	    	cal.isL=true;
 	       else if(args[i].equals("-s"))
 		    isReadall=true;
+	       else if(args[i].equals("-a"))
+	    	cal.isA=true;
 	       else if(args[i].equals("-o"))
 	       {
 	    	   if(!isInput)
@@ -95,6 +91,10 @@ public static void main(String[] args)
         	else             //无停用
         	{
         		cal.calfile(filepath);
+        	}
+        	if(cal.isA)      //若要统计行的类别
+        	{
+        		cal.calAll(filepath);
         	}
         	cal.writefile_single(filepath,outputpath);
         }

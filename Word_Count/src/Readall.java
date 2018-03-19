@@ -21,18 +21,14 @@ public class Readall   //递归读取文本文件
 	    	if(filepath.matches("\\*.*")) //若文件名含通配符*
 	    		isT=true;
 	    	gettemp(filepath);  //获取用户要检索的文件后缀
-	    	System.out.println("1");
 	    	if(filepath.matches("^\\*.*"))  //如果输入的文件路径形如"*.c"
 	    	{
-	    		System.out.println("2");
 	    		filepath=".";               //直接搜索wc.exe所在文件夹
 	    	}
 	    	else
 	    	{
-	    		System.out.println("3");
 	    		filepath=filepath.substring(0,filepath.lastIndexOf("\\*")).toLowerCase(); //否则获取"*.c"之前的路径
 	    	}
-	    	System.out.println("4");
 	    	find(filepath);                 //遍历文件夹
 	    }
 	    	    
@@ -70,11 +66,9 @@ public class Readall   //递归读取文本文件
 	        	if(cal.isStop)    //若指定停用词表
 	        		cal.s_calfile(filepath,stoppath);  //停用方式统计
 	        	else              //若无停用词表
-	        		{
-	        		System.out.println("5");
 	        	    cal.calfile(filepath);             //非停用方式统计
-	        	    }
-	        	    System.out.println("6");
+	        	if(cal.isA)
+	        		cal.calAll(filepath);
 	        	cal.writefile(f1, cal, outpath);  //将结果写入指定文件
 	        	}
 	        }  
