@@ -15,35 +15,89 @@ public class Test
 {
 public static void main(String[] args)
 {
-    try 
-    { // 防止文件建立或读取失败，用catch捕捉错误并打印，也可以throw  
+	Calculate cal=new Calculate();
+	boolean isInput=false;  //是否已输入被统计文件
+	boolean isReadall=false;  //是否递归处理
+	String filepath="original";
+	String stoppath="original";
+	String outputpath="result.txt";
+		if (args.length == 0) 
+		{
+			System.out.println("您没有指定任何参数！");  
+			return;  
+	    }  
+			//System.out.println("您输入的命令是："); 
+		/**根据输入参数调整设置**/
+	    for (int i = 0; i < args.length; i++) 
+	    {  if(args[i].equals("-c"))
+	    	cal.isC=true;
+	       else if(args[i].equals("-w"))
+	    	cal.isW=true;
+	       else if(args[i].equals("-l"))
+	    	cal.isL=true;
+	       else if(args[i].equals("-s"))
+		    isReadall=true;
+	       else if(args[i].equals("-o"))
+	       {
+	    	   if(!isInput)
+	    		   System.out.println("未输入待统计文件！请重新输入");
+	       }
+	       else if(args[i].equals("-e"))
+	       {
+	    	   if(!isInput)
+	    		   System.out.println("未输入待统计文件！请重新输入");
+	    	   else
+	    		   cal.isStop=true;
+	       }
+	       else if(args[i-1].equals("-o"))
+	       {
+	    	   outputpath=args[i];
+	       }
+	       else if(args[i-1].equals("-e"))
+	       {
+	    	   stoppath=args[i];
+	       }
+	       else
+	       {
+	    	   filepath=args[i];
+	    	   isInput=true;
+	       }
+			
+	    }  
 
-        /* 读入TXT文件 */  
-        String pathname = "file.c";   // 使用相对路径
-        File filename = new File(pathname); // 要读取以上路径的input.txt文件  
-        InputStreamReader reader = new InputStreamReader( new FileInputStream(filename)); // 建立一个输入流对象reader  
-        BufferedReader br = new BufferedReader(reader); // 建立一个对象，它把文件内容转成计算机能读懂的语言  
-        String line = "";  
-        line = br.readLine();  //读取文件第一行
-        System.out.println(line); //测试读取内容
-        while (line != null) 
-        {  
-            line = br.readLine(); // 一次读入一行数据 
-            if(line!=null)
-            System.out.println(line);
-        }  
-        
-        /* 写入文件 */  
-        File writename = new File("output.txt"); // 相对路径，如果没有则要建立一个新的output。txt文件  
-        writename.createNewFile(); // 创建新文件  
-        BufferedWriter out = new BufferedWriter(new FileWriter(writename));  
-        out.write("我会写入文件啦\r\n"); // \r\n即为换行  
-        out.flush(); // 把缓存区内容压入文件  
-        out.close(); // 最后记得关闭文件  
-    } 
-    catch (Exception e) 
-    {  
-        e.printStackTrace();  
-    } 
+	    /**根据输入参数进行判断**/
+	    File output = new File(outputpath); //相对路径，如果有则清除已有内容
+        if (output.exists())            
+        {    
+            cal.clearfile(outputpath);// 存在则清除    
+        } 
+        if(isReadall)  //有递归
+        {
+        	Readall read=new Readall();
+        	read.cal=cal;
+        	read.outpath=outputpath;
+        	if(cal.isStop)  //有停用
+        	{
+        		read.stoppath=stoppath;
+        		read.deal(filepath);
+        	}
+        	else            //无停用
+        	{
+        		read.deal(filepath);
+        	}
+        }
+        else           //处理单个文件
+        {
+        	if(cal.isStop)   //有停用
+        	{
+        		cal.s_calfile(filepath, stoppath);
+        	}
+        	else             //无停用
+        	{
+        		cal.calfile(filepath);
+        	}
+        	cal.writefile_single(filepath,outputpath);
+        }
+
 }
 }
