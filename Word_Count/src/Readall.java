@@ -13,21 +13,19 @@ public class Readall   //递归读取文本文件
 	    String temp;   //用户要求的后缀名
 	    String stoppath; //禁用词路径
 	    Calculate cal=new Calculate();  //统计类
-	    boolean isT=false;        //是否有通配符
 	    
 	    /**处理递归检索路径**/
 	    public void deal(String filepath)  /**只能处理带通配符的情况**/
 	    {
-	    	if(filepath.matches("\\*.*")) //若文件名含通配符*
-	    		isT=true;
 	    	gettemp(filepath);  //获取用户要检索的文件后缀
-	    	if(filepath.matches("^\\*.*"))  //如果输入的文件路径形如"*.c"
+	    	if(filepath.indexOf('\\')!=-1) //若文件名含斜杠
 	    	{
-	    		filepath=".";               //直接搜索wc.exe所在文件夹
+	    		filepath=filepath.substring(0,filepath.lastIndexOf("\\")).toLowerCase(); //获取最后一个斜杠之前的路径
+	    		System.out.println(filepath);
 	    	}
 	    	else
 	    	{
-	    		filepath=filepath.substring(0,filepath.lastIndexOf("\\*")).toLowerCase(); //否则获取"*.c"之前的路径
+	    		filepath=".";               //否则直接搜索wc.exe所在文件夹
 	    	}
 	    	find(filepath);                 //遍历文件夹
 	    }
