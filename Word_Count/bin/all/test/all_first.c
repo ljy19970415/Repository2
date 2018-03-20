@@ -1,15 +1,15 @@
 
 int main()
 {
-//hello world
- /*gaew */q
+//lei lei's code
+ /*note */q
 /* */
-/* /*/* */ggew
- */weg
-*/gew
+/* /*/* */note
+ */ note
+*/ note
 	if()
 	{
 	do this;//
 	}
-but,if this,is right?
+, this is the end! ,
 }
