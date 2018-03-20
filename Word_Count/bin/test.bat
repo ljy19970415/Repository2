@@ -7,3 +7,6 @@ wc.exe -w test.c
 wc.exe -w test.c -e wrong.txt
 wc.exe -w wrong.c
 wc.exe -c test.c -o
+wc.exe -c -s *.c
+wc.exe -c -s all\*.c
+wc.exe -c -s D:\git_commit\Word_Count\bin\all\*.c
