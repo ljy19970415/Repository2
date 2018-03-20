@@ -21,7 +21,6 @@ public class Readall   //递归读取文本文件
 	    	if(filepath.indexOf('\\')!=-1) //若文件名含斜杠
 	    	{
 	    		filepath=filepath.substring(0,filepath.lastIndexOf("\\")).toLowerCase(); //获取最后一个斜杠之前的路径
-	    		System.out.println(filepath);
 	    	}
 	    	else
 	    	{
@@ -31,33 +30,33 @@ public class Readall   //递归读取文本文件
 	    }
 	    	    
 	    /**递归检索文件并输出统计结果**/
-	    public void find(String fileDir)
+	    public void find(String fileDir)    //输入参数为文件夹路径
 	    {  
-	        List<File> fileList = new ArrayList<File>();  
+	        List<File> fileList = new ArrayList<File>();  //动态数组保存检索到的文本文件
 	        File file = new File(fileDir);  
 	        File[] files = file.listFiles();// 获取目录下的所有文件或文件夹  
         	
-	        if (files == null) 
+	        if (files == null)      //若里面无文件
 	        {
 	        	System.out.println("非文件夹路径！");
 	            return;  
 	        }  
-	        // 遍历目录下的所有文件  
-	        for (File f : files) 
+	        
+	        for (File f : files)    // 遍历目录下的所有文件  
 	        {  
-	            if (f.isFile()) 
+	            if (f.isFile())     //若是文件则加入待处理集合
 	            {  
 	                fileList.add(f);  
 	            } 
-	            else if (f.isDirectory()) 
+	            else if (f.isDirectory())  //若是文件夹则递归检索
 	            {  
 	                find(f.getAbsolutePath());  
 	            }  
 	        }  
 	        
-	        for (File f1 : fileList) 
+	        for (File f1 : fileList)      //遍历待处理文件集合
 	        {   
-	        	if(match(f1.getName()))  //文件后缀名是否满足要求
+	        	if(match(f1.getName()))  //若文件后缀名满足用户要求，则统计
 	        	{
 	        	String filepath=f1.getAbsolutePath(); //生成该文本文件绝对路径
 	            //停用判断

@@ -12,8 +12,8 @@ public static void main(String[] args)
 	Calculate cal=new Calculate();
 	boolean isInput=false;  //是否已输入被统计文件
 	boolean isReadall=false;  //是否递归处理
-	String filepath="original";
-	String stoppath="original";
+	String filepath="";
+	String stoppath="";
 	String outputpath="result.txt";
 		if (args.length == 0) 
 		{
@@ -36,31 +36,40 @@ public static void main(String[] args)
 	       else if(args[i].equals("-o"))
 	       {
 	    	   if(!isInput)
+	    	   {
 	    		   System.out.println("未输入待统计文件！请重新输入");
+	    	   }
+	    	   else
+	    	   outputpath=args[i+1];  //
 	       }
 	       else if(args[i].equals("-e"))
 	       {
 	    	   if(!isInput)
+	    	   {
 	    		   System.out.println("未输入待统计文件！请重新输入");
+	    	   }
 	    	   else
+	    	   {
 	    		   cal.isStop=true;
+	    		   stoppath=args[i+1];
+	    	   }
 	       }
 	       else if(args[i-1].equals("-o"))
 	       {
-	    	   outputpath=args[i];
+	    	   //outputpath=args[i];
 	       }
 	       else if(args[i-1].equals("-e"))
 	       {
-	    	   stoppath=args[i];
+	    	   //stoppath=args[i];
 	       }
 	       else
 	       {
 	    	   filepath=args[i];
 	    	   isInput=true;
 	       }
-			
 	    }  
-
+        if(!isInput)
+        	return;
 	    /**根据输入参数进行判断**/
 	    File output = new File(outputpath); //相对路径，如果有则清除已有内容
         if (output.exists())            
